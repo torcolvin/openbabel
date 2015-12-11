@@ -257,10 +257,15 @@ namespace OpenBabel
         } // attempt to parse charges
       }
 
+    size_t pos = ifs.tellg();
     // clean out any remaining blank lines
     while(ifs.peek() != EOF && ifs.good() &&
-          (ifs.peek() == '\n' || ifs.peek() == '\r'))
+          (ifs.peek() == '\n' || ifs.peek() == '\r')) {
       ifs.getline(buffer,BUFF_SIZE);
+      pos = ifs.tellg();
+    }
+    // Reset pos if peek() has screwed this up
+    ifs.seekg(pos);
 
     if (!pConv->IsOption("b",OBConversion::INOPTIONS))
       mol.ConnectTheDots();
